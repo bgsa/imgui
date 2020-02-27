@@ -1,24 +1,35 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(imgui VERSION 1.0.0)
 
-find_package(OpenGL REQUIRED)
-find_package(imgui  REQUIRED)
+set (CMAKE_C_STANDARD 11)
+set (CMAKE_C_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (UNIX)
+find_package(OpenGL REQUIRED)
+
+if ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
     find_package(PkgConfig REQUIRED)
     pkg_search_module(GLFW REQUIRED glfw3)
 endif()
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/)
+
+#file(GLOB SOURCES "../imgui*.cpp")
 
 INCLUDE_DIRECTORIES(
+	/usr/include/
     /usr/local/include/
-    ./../
 )
 
-link_directories(/usr/local/lib/)
+link_directories(
+	/lib
+	/usr/lib
+	/usr/local/lib/
+	/usr/lib/x86_64-linux-gnu/
+)
 
-add_library(imgui 
+add_library(imgui
                 ../imgui.cpp
                 ../imgui_draw.cpp
                 ../imgui_widgets.cpp
