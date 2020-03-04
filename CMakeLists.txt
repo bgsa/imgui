@@ -13,15 +13,13 @@ if ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
     pkg_search_module(GLFW REQUIRED glfw3)
 endif()
 
-set (OUTPUT_LIB_DIR ../lib)
+set (OUTPUT_LIB_DIR ../../lib)
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_LIB_DIR})
 
 if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif()
-
-#file(GLOB SOURCES "../imgui*.cpp")
 
 if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
 	set (GLFW_LIB_NAME glfw3.lib)
@@ -56,18 +54,18 @@ add_library(imgui STATIC
                 ../imgui_draw.cpp
                 ../imgui_widgets.cpp
                 ../imgui_impl_glfw.cpp
-                #../imgui_impl_opengl2.cpp
 				../imgui_impl_opengl3.cpp
+)
+
+target_compile_definitions(imgui 
+	PUBLIC GLEW_STATIC
+    PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW
 )
 
 target_link_libraries(imgui
     ${OPENGL_LIBRARY}
-	${GLEW_LIB_NAME}
+	${OUTPUT_LIB_DIR}/${GLEW_LIB_NAME}
 	${OUTPUT_LIB_DIR}/${GLFW_LIB_NAME}
-)
-
-target_compile_definitions(imgui 
-    PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
