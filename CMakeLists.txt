@@ -11,6 +11,8 @@ find_package(OpenGL REQUIRED)
 if ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
     find_package(PkgConfig REQUIRED)
     pkg_search_module(GLFW REQUIRED glfw3)
+
+    find_package(GLEW REQUIRED)
 endif()
 
 set (OUTPUT_LIB_DIR ../../lib)
@@ -22,23 +24,21 @@ if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
 endif()
 
 if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
-	set (GLFW_LIB_NAME glfw3.lib)
-	set (GLEW_LIB_NAME glew32s.lib)
+	set (GLFW_INCLUDE_DIRS ../glfw/include)
+	set (GLFW_LIBRARIES    ${OUTPUT_LIB_DIR}/glfw3.lib)
+	set (GLEW_LIBRARIES    ${OUTPUT_LIB_DIR}/glew32d.lib)
 elseif ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
-	set (GLFW_LIB_NAME libglfw3.a)
-	set (GLEW_LIB_NAME libglew.lib)
 elseif ( ${OPERATING_SYSTEM} STREQUAL "UNIX" )
-	set (GLFW_LIB_NAME libglfw3.a)
-	set (GLEW_LIB_NAME libglew.lib)
 else()
 	message(FATAL_ERROR "Operating System not defined")
 endif()
 
-INCLUDE_DIRECTORIES(
+include_directories(
 	../include
-	../glfw/include
+	${GLFW_INCLUDE_DIRS}
+	${GLEW_INCLUDE_DIRS}
 	/usr/include
-    /usr/local/include
+	/usr/local/include
 )
 
 link_directories(
@@ -50,22 +50,22 @@ link_directories(
 )
 
 add_library(imgui STATIC
-                ../imgui.cpp
-                ../imgui_draw.cpp
-                ../imgui_widgets.cpp
-                ../imgui_impl_glfw.cpp
-				../imgui_impl_opengl3.cpp
+	../imgui.cpp
+	../imgui_draw.cpp
+	../imgui_widgets.cpp
+	../imgui_impl_glfw.cpp
+	../imgui_impl_opengl3.cpp
 )
 
 target_compile_definitions(imgui 
 	PUBLIC GLEW_STATIC
-    PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW
+	PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW
 )
 
 target_link_libraries(imgui
-    ${OPENGL_LIBRARY}
-	${OUTPUT_LIB_DIR}/${GLEW_LIB_NAME}
-	${OUTPUT_LIB_DIR}/${GLFW_LIB_NAME}
+	${OPENGL_LIBRARY}
+	${GLEW_LIBRARIES}
+	${GLFW_LIBRARIES}
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
