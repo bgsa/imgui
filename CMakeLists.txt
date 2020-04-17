@@ -15,7 +15,6 @@ if ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
     find_package(GLEW REQUIRED)
 endif()
 
-set (OUTPUT_LIB_DIR ../../lib)
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_LIB_DIR})
 
 if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
@@ -25,8 +24,8 @@ endif()
 
 if ( ${OPERATING_SYSTEM} STREQUAL "WINDOWS" )
 	set (GLFW_INCLUDE_DIRS ../glfw/include)
-	set (GLFW_LIBRARIES    ${OUTPUT_LIB_DIR}/glfw3.lib)
-	set (GLEW_LIBRARIES    ${OUTPUT_LIB_DIR}/glew32d.lib)
+	set (GLFW_LIBRARIES    ${OUTPUT_LIB_DIR}/Debug/glfw3.lib)
+	set (GLEW_LIBRARIES    ${OUTPUT_LIB_DIR}/../glew32d.lib)
 elseif ( ${OPERATING_SYSTEM} STREQUAL "LINUX" )
 elseif ( ${OPERATING_SYSTEM} STREQUAL "UNIX" )
 else()
